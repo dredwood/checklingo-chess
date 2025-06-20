@@ -61,12 +61,20 @@
         game.move({ from: source, to: target });
 
         if (target === 'f3') {
-          document.getElementById('status').innerHTML = '✅ Great job! You moved the knight to f3.';
+  document.getElementById('status').innerHTML = '✅ Great job!';
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      const userRef = firebase.firestore().collection("users").doc(user.uid);
+      userRef.update({ xp: firebase.firestore.FieldValue.increment(10) })
+        .then(() => {
           setTimeout(() => {
-            // here you can update XP in Firebase or unlock lesson 2
             window.location.href = 'dashboard.html';
-          }, 1500);
-        } else {
+          }, 1000);
+        });
+    }
+  });
+}
+ else {
           document.getElementById('status').innerHTML = '❌ Try again. Move it to f3.';
           return 'snapback';
         }
