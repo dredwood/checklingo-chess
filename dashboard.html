@@ -111,11 +111,26 @@
   </div>
 
   <script>
-    firebase.auth().onAuthStateChanged(user => {
-      if (!user) window.location.href = "index.html";
-      // You could also load user's XP here and update the XP bar dynamically
-      // Example: document.getElementById("xpFill").style.width = "60%";
-    });
-  </script>
-</body>
-</html>
+    <script>
+firebase.auth().onAuthStateChanged(user => {
+  if (!user) return window.location.href = "index.html";
+
+  const userRef = firebase.firestore().collection("users").doc(user.uid);
+  userRef.get().then(doc => {
+    if (doc.exists) {
+      const xp = doc.data().xp || 0;
+
+      // Update XP bar
+      const fill = document.getElementById("xpFill");
+      fill.style.width = Math.min((xp / 50) * 100, 100) + "%";
+
+      // Unlock lessons based on XP
+      const lessons = document.querySelectorAll(".lesson");
+      if (xp >= 10) lessons[1].classList.remove("locked"); // Bishop
+      if (xp >= 20) lessons[2].classList.remove("locked"); // Rook
+      if (xp >= 30) lessons[3].classList.remove("locked"); // Queen
+      if (xp >= 40) lessons[4].classList.remove("locked"); // Checkmate
+    }
+  });
+});
+</script>
