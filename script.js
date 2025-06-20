@@ -1,18 +1,19 @@
-function signUp() {
+const signUp = () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(() => alert("Signed up successfully! Now log in."))
-    .catch((error) => alert(error.message));
-}
-
-function login() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  auth.signInWithEmailAndPassword(email, password)
+  firebase.auth().createUserWithEmailAndPassword(email, password)
     .then(() => {
-      alert("Logged in!");
+      alert("Signed up! Now log in.");
+    })
+    .catch((err) => alert(err.message));
+};
+
+const login = () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(() => {
       window.location.href = "dashboard.html";
     })
-    .catch((error) => alert(error.message));
-}
+    .catch((err) => alert(err.message));
+};
