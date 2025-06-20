@@ -1,55 +1,121 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Checklingo Dashboard</title>
+  <title>Checklingo Chess - Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
   <script src="firebase.js"></script>
   <style>
-    .lesson {
-      display: inline-block;
-      padding: 15px;
-      margin: 10px;
-      border-radius: 12px;
-      background-color: #f2f2f2;
-      border: 2px solid #ccc;
-      width: 130px;
-      text-align: center;
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #101820, #1c1f2a);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
+    .header {
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+      background: #181c2c;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .avatar {
+      margin-top: 20px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: #ccc;
+    }
+
+    .xp-bar {
+      margin-top: 20px;
+      width: 80%;
+      height: 20px;
+      border-radius: 10px;
+      background-color: #444;
+      overflow: hidden;
+      border: 1px solid #999;
+    }
+
+    .xp-fill {
+      height: 100%;
+      width: 20%;
+      background-color: #4caf50;
+      transition: width 0.4s;
+    }
+
+    .lessons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      padding: 30px;
+      width: 90%;
+      max-width: 800px;
+    }
+
+    .lesson {
+      background: #282c3f;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .lesson:hover {
+      background: #394259;
+    }
+
     .lesson.locked {
-      opacity: 0.4;
+      opacity: 0.3;
       pointer-events: none;
     }
-    #xp-bar {
-      width: 100%;
-      height: 20px;
-      background-color: #ddd;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    #xp-fill {
-      width: 20%;
-      height: 100%;
-      background-color: #4caf50;
+
+    a {
+      text-decoration: none;
+      color: inherit;
     }
   </style>
 </head>
 <body>
-  <h1>Welcome, Checklingo Cadet!</h1>
-  <div id="xp-bar"><div id="xp-fill"></div></div>
+  <div class="header">
+    <h1>Checklingo Chess</h1>
+  </div>
 
-  <div class="lesson">
-    <a href="lesson1.html">♞ Knight Moves</a>
+  <div class="avatar">♘</div>
+
+  <div class="xp-bar">
+    <div class="xp-fill" id="xpFill"></div>
   </div>
-  <div class="lesson locked">
-    Lesson 2: Bishop
+
+  <div class="lessons">
+    <a href="lesson1.html"><div class="lesson">♞ Knight</div></a>
+    <div class="lesson locked">♝ Bishop</div>
+    <div class="lesson locked">♜ Rook</div>
+    <div class="lesson locked">♛ Queen</div>
+    <div class="lesson locked">♚ Checkmate</div>
   </div>
-  <div class="lesson locked">
-    Lesson 3: Rook
-  </div>
+
+  <script>
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) window.location.href = "index.html";
+      // You could also load user's XP here and update the XP bar dynamically
+      // Example: document.getElementById("xpFill").style.width = "60%";
+    });
+  </script>
 </body>
 </html>
-
