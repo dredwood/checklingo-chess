@@ -1,16 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Lesson 1: Knight Movement</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Lesson 1 – Knight Moves</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #101820;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    #board {
+      width: 300px;
+      margin: 20px auto;
+    }
+    #status {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+    button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #4caf50;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+  </style>
 </head>
 <body>
-  <h1>Lesson 1: How Knights Move</h1>
-  <p>Knights move in an L-shape — two squares in one direction and one square perpendicular.</p>
-  <p><strong>Question:</strong> Can a knight move from E4 to F6?</p>
-  <button onclick="alert('Correct!')">Yes</button>
-  <button onclick="alert('Incorrect!')">No</button>
-  <br/><br/>
-  <a href="dashboard.html">← Back to Dashboard</a>
+  <h1>Lesson 1: Knight Moves</h1>
+  <p>Drag the knight to <strong>f3</strong></p>
+  <div id="board"></div>
+  <div id="status"></div>
+  <button onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+  <script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+  <script>
+    const game = new Chess();
+    game.clear();
+    game.put({ type: 'n', color: 'w' }, 'g1');
+    const board = Chessboard('board', {
+      position: game.fen(),
+      draggable: true,
+      onDrop: (source, target, piece) => {
+        if (piece !== 'wN') return 'snapback';
+
+        const legal = game.moves({ square: source, verbose: true }).find(m => m.to === target);
+
+        if (!legal) return 'snapback';
+
+        game.move({ from: source, to: target });
+
+        if (target === 'f3') {
+          document.getElementById('status').innerHTML = '✅ Great job! You moved the knight to f3.';
+          setTimeout(() => {
+            // here you can update XP in Firebase or unlock lesson 2
+            window.location.href = 'dashboard.html';
+          }, 1500);
+        } else {
+          document.getElementById('status').innerHTML = '❌ Try again. Move it to f3.';
+          return 'snapback';
+        }
+      }
+    });
+  </script>
 </body>
 </html>
