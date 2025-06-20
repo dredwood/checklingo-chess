@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lesson 2 – Bishop Moves</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0e1b24;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    #board {
+      width: 300px;
+      margin: 20px auto;
+    }
+    #status {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+    button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #1976d2;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1565c0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lesson 2: Bishop Moves</h1>
+  <p>Drag the bishop to <strong>g5</strong></p>
+  <div id="board"></div>
+  <div id="status"></div>
+  <button onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+  <script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="firebase.js"></script>
+  <script>
+    const game = new Chess();
+    game.clear();
+    game.put({ type: 'b', color: 'w' }, 'c1');
+
+    const board = Chessboard('board', {
+      position: game.fen(),
+      draggable: true,
+      onDrop: (source, target, piece) => {
+        if (piece !== 'wB') return 'snapback';
+
+        const legal = game.moves({ square: source, verbose: true }).find(m => m.to === target);
+        if (!legal) return 'snapback';
+
+        game.move({ from: source, to: target });
+
+        if (target === 'g5') {
+          document.getElementById('status').innerHTML = '✅ Excellent!';
+
+          firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+              const userRef = firebase.firestore().collection("users").doc(user.uid);
+              userRef.update({ xp: firebase.firestore.FieldValue.increment(10) })
+                .then(() => {
+                  setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                  }, 1000);
+                });
+            }
+          });
+        } else {
+          document.getElementById('status').innerHTML = '❌ Try again. Move it to g5.';
+          return 'snapback';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
