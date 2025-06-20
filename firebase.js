@@ -1,5 +1,4 @@
 const firebaseConfig = {
-  const firebaseConfig = {
   apiKey: "AIzaSyA6qJkwmRSTjUI6r6ZpThZyos7q_McdTIE",
   authDomain: "checklingo-a155e.firebaseapp.com",
   databaseURL: "https://checklingo-a155e-default-rtdb.firebaseio.com",
