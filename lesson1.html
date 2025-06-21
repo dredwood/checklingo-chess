@@ -3,38 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <title>Lesson 1: Knight to f3</title>
-  <link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/www/css/chessboard.css" />
+
+  <!-- ✅ ChessboardJS and Chess.js from CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
+  <script src="https://unpkg.com/chess.js@0.10.3/chess.min.js"></script>
+  <script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+
+  <!-- ✅ Firebase CDN (Compat version) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <script src="https://unpkg.com/chess.js@0.13.4/chess.js"></script>
-  <script src="https://unpkg.com/chessboardjs@1.0.0/www/js/chessboard.js"></script>
   <script src="firebase.js"></script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #f5f7fa;
       text-align: center;
-      margin-top: 40px;
-      background: #f4f6f8;
+      padding-top: 30px;
     }
     h1 {
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     #board {
       width: 400px;
-      margin: auto;
+      margin: 0 auto;
     }
     #status {
       margin-top: 20px;
       font-size: 1.2em;
-      color: #333;
     }
   </style>
 </head>
 <body>
   <h1>Lesson 1: Move the Knight to f3</h1>
   <div id="board"></div>
-  <div id="status">♞ Move your knight from g1 to f3</div>
+  <div id="status">♞ Move the knight from g1 to f3</div>
 
   <script>
     const board = Chessboard('board', {
@@ -44,7 +48,7 @@
         g1: 'wN',
         e8: 'bK'
       },
-      onDrop: function (source, target, piece, newPos, oldPos, orientation) {
+      onDrop: function (source, target, piece) {
         if (piece === 'wN' && source === 'g1' && target === 'f3') {
           document.getElementById('status').innerText = '✅ Correct! +10 XP';
 
@@ -60,7 +64,7 @@
             }
           });
         } else {
-          document.getElementById('status').innerText = '❌ Try again. Move the knight to f3.';
+          document.getElementById('status').innerText = '❌ Try again. Move to f3.';
           return 'snapback';
         }
       }
