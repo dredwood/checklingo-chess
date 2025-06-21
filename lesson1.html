@@ -2,17 +2,17 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Lesson 1: Knight to f3</title>
+  <title>Lesson 1: Move the Knight</title>
 
-  <!-- Working styles/scripts from jsDelivr -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
+  <!-- ✅ WORKING CDN links from jsDelivr -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chess.js@0.10.3/chess.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
 
   <style>
     body {
-      text-align: center;
       font-family: sans-serif;
+      text-align: center;
       padding: 20px;
     }
     #board {
@@ -20,15 +20,15 @@
       margin: 20px auto;
     }
     #status {
-      font-size: 20px;
+      font-size: 18px;
       margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>♞ Move the Knight to f3</h1>
+  <h2>♞ Move the Knight from g1 to f3</h2>
   <div id="board"></div>
-  <div id="status">Your move...</div>
+  <div id="status">Drag the knight to f3</div>
 
   <script>
     const config = {
@@ -38,16 +38,15 @@
         e1: 'wK',
         e8: 'bK'
       },
-      onDrop: function (source, target, piece, newPos, oldPos, orientation) {
+      onDrop: function (source, target, piece) {
         if (piece === 'wN' && source === 'g1' && target === 'f3') {
           document.getElementById('status').innerText = "✅ Correct!";
         } else {
-          document.getElementById('status').innerText = "❌ Try again. Move the knight from g1 to f3.";
+          document.getElementById('status').innerText = "❌ Try again. Move it to f3.";
           return 'snapback';
         }
       }
     };
-
     const board = Chessboard('board', config);
   </script>
 </body>
