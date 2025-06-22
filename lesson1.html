@@ -1,59 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Knight Lesson 1</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="./chessboard-1.0.0.min.css" />
+  <meta charset="utf-8">
+  <title>Lesson 1 – Knight Movement</title>
+  <link rel="stylesheet" href="chessboard-1.0.0.min.css">
   <style>
-    body {
-      font-family: sans-serif;
-      background: #f3f4f6;
-      text-align: center;
-      padding: 20px;
-    }
     #board {
-      width: 300px;
+      width: 400px;
       margin: 20px auto;
     }
     #status {
+      text-align: center;
       font-size: 1.2rem;
       margin-top: 10px;
     }
   </style>
 </head>
 <body>
-
-  <h1>♞ Knight Puzzle: Move to f3</h1>
+  <h2 style="text-align:center;">Lesson 1: Move the Knight to f3</h2>
   <div id="board"></div>
-  <div id="status">Your goal: move the knight to f3</div>
+  <div id="status">♞ Move the knight from g1 to f3</div>
 
   <script src="chess.min.js"></script>
   <script src="chessboard-1.0.0.min.js"></script>
   <script>
-    const config = {
+    const board = Chessboard('board', {
       draggable: true,
       position: {
-        e1: 'wK',
-        g1: 'wN',
-        a8: 'bK'
+        g1: 'wN'
       },
-      pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
-      onDrop: function(source, target, piece, newPos, oldPos, orientation) {
-        if (piece === 'wN' && source === 'g1' && target === 'f3') {
+      onDrop: (source, target, piece, newPos, oldPos, orientation) => {
+        if (source === 'g1' && target === 'f3' && piece === 'wN') {
           document.getElementById('status').innerText = '✅ Great job!';
-          // Optional XP logic goes here
-          setTimeout(() => {
-            window.location.href = 'dashboard.html'; // or next lesson
-          }, 1200);
         } else {
           document.getElementById('status').innerText = '❌ Try again. Move to f3.';
           return 'snapback';
         }
       }
-    };
-
-    const board = Chessboard('board', config);
+    });
   </script>
 </body>
 </html>
