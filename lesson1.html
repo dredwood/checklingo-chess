@@ -1,39 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Lesson 1 – Knight Movement</title>
-  <link rel="stylesheet" href="chessboard-1.0.0.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 1 - Knight to f3</title>
+  <link rel="stylesheet" href="./chessboard-1.0.0.min.css" />
   <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 2em;
+    }
     #board {
       width: 400px;
       margin: 20px auto;
     }
     #status {
-      text-align: center;
-      font-size: 1.2rem;
-      margin-top: 10px;
+      font-size: 1.2em;
+      margin-top: 1em;
     }
   </style>
 </head>
 <body>
-  <h2 style="text-align:center;">Lesson 1: Move the Knight to f3</h2>
+  <h1>Lesson 1: Move the Knight to f3</h1>
   <div id="board"></div>
-  <div id="status">♞ Move the knight from g1 to f3</div>
+  <div id="status">♟️ Move the knight on g1 to f3.</div>
 
-  <script src="chess.min.js"></script>
-  <script src="chessboard-1.0.0.min.js"></script>
+  <script src="./chess.min.js"></script>
+  <script src="./chessboard-1.0.0.min.js"></script>
   <script>
     const board = Chessboard('board', {
       draggable: true,
-      position: {
-        g1: 'wN'
-      },
-      onDrop: (source, target, piece, newPos, oldPos, orientation) => {
-        if (source === 'g1' && target === 'f3' && piece === 'wN') {
-          document.getElementById('status').innerText = '✅ Great job!';
+      position: 'start',
+      onDrop: function (source, target) {
+        if (source === 'g1' && target === 'f3') {
+          document.getElementById('status').innerHTML = '✅ Great job!';
         } else {
-          document.getElementById('status').innerText = '❌ Try again. Move to f3.';
+          document.getElementById('status').innerHTML = '❌ Try again. Move the knight from g1 to f3.';
           return 'snapback';
         }
       }
