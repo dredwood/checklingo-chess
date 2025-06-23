@@ -2,16 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lesson 1 - Knight to f3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lesson 1: Knight Movement</title>
 
   <!-- ✅ Chessboard CSS via CDN -->
-  <link rel="stylesheet" href="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
+
   <style>
     body {
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
       text-align: center;
-      padding: 2em;
+      padding: 20px;
+      background-color: #f4f4f4;
     }
     #board {
       width: 400px;
@@ -19,32 +21,43 @@
     }
     #status {
       font-size: 1.2em;
-      margin-top: 1em;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>Lesson 1: Move the Knight to f3</h1>
-  <div id="board"></div>
-  <div id="status">♟️ Move the knight on g1 to f3.</div>
 
-  <!-- ✅ JS Libraries via CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
-  <script src="https://unpkg.com/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+  <h1>♘ Lesson 1: Move the Knight to f3</h1>
+  <div id="board"></div>
+  <div id="status">Move the knight from g1 to f3</div>
+
+  <!-- ✅ Chess JS + Chessboard JS via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chess.js@0.10.3/chess.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
 
   <script>
     const board = Chessboard('board', {
       draggable: true,
-      position: 'start',
-      onDrop: function (source, target) {
-        if (source === 'g1' && target === 'f3') {
-          document.getElementById('status').innerHTML = '✅ Great job!';
-        } else {
-          document.getElementById('status').innerHTML = '❌ Try again. Move the knight from g1 to f3.';
-          return 'snapback';
-        }
-      }
+      position: {
+        a8:'r', b8:'n', c8:'b', d8:'q', e8:'k', f8:'b', g8:'n', h8:'r',
+        a7:'p', b7:'p', c7:'p', d7:'p', e7:'p', f7:'p', g7:'p', h7:'p',
+        a2:'P', b2:'P', c2:'P', d2:'P', e2:'P', f2:'P', g2:'P', h2:'P',
+        a1:'R', b1:'N', c1:'B', d1:'Q', e1:'K', f1:'B', g1:'N', h1:'R'
+      },
+      pieceTheme: 'https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/img/chesspieces/wikipedia/{piece}.png',
+      onDrop: onDrop
     });
+
+    function onDrop(source, target, piece, newPos, oldPos, orientation) {
+      if (source === 'g1' && target === 'f3' && piece === 'wN') {
+        document.getElementById('status').innerHTML = '✅ Great job! You moved the knight correctly.';
+        return;
+      } else {
+        document.getElementById('status').innerHTML = '❌ Try again. Move the knight from g1 to f3.';
+        return 'snapback';
+      }
+    }
   </script>
+
 </body>
 </html>
