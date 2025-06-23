@@ -2,62 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lesson 1: Knight Movement</title>
-
-  <!-- ✅ Chessboard CSS via CDN -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 1: Knight to f3</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
-
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       text-align: center;
-      padding: 20px;
-      background-color: #f4f4f4;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 2rem;
     }
     #board {
-      width: 400px;
+      width: 350px;
       margin: 20px auto;
     }
     #status {
-      font-size: 1.2em;
+      font-size: 1.2rem;
       margin-top: 10px;
     }
   </style>
 </head>
 <body>
-
-  <h1>♘ Lesson 1: Move the Knight to f3</h1>
+  <h1>♞ Lesson 1: Move the Knight to f3</h1>
   <div id="board"></div>
-  <div id="status">Move the knight from g1 to f3</div>
+  <div id="status">Your move: ♘ to f3</div>
 
-  <!-- ✅ Chess JS + Chessboard JS via CDN -->
+  <!-- Firebase SDK (optional, only if you use XP tracking) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="firebase.js"></script>
+
+  <!-- chess.js and chessboard.js from CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chess.js@0.10.3/chess.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
 
   <script>
+    const game = new Chess();
+
     const board = Chessboard('board', {
       draggable: true,
-      position: {
-        a8:'r', b8:'n', c8:'b', d8:'q', e8:'k', f8:'b', g8:'n', h8:'r',
-        a7:'p', b7:'p', c7:'p', d7:'p', e7:'p', f7:'p', g7:'p', h7:'p',
-        a2:'P', b2:'P', c2:'P', d2:'P', e2:'P', f2:'P', g2:'P', h2:'P',
-        a1:'R', b1:'N', c1:'B', d1:'Q', e1:'K', f1:'B', g1:'N', h1:'R'
-      },
-      pieceTheme: 'https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/img/chesspieces/wikipedia/{piece}.png',
-      onDrop: onDrop
-    });
+      position: 'start',
+      onDrop: function (source, target, piece, newPos, oldPos, orientation) {
+        if (piece[1] !== 'N') {
+          document.getElementById('status').innerText = '❌ Use the knight!';
+          return 'snapback';
+        }
 
-    function onDrop(source, target, piece, newPos, oldPos, orientation) {
-      if (source === 'g1' && target === 'f3' && piece === 'wN') {
-        document.getElementById('status').innerHTML = '✅ Great job! You moved the knight correctly.';
-        return;
-      } else {
-        document.getElementById('status').innerHTML = '❌ Try again. Move the knight from g1 to f3.';
-        return 'snapback';
+        if (source === 'g1' && target === 'f3') {
+          game.move({ from: source, to: target });
+
+          document.getElementById('status').innerText = '✅ Great job! +10 XP';
+
+          // OPTIONAL: reward XP via Firebase
+          firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+              const userRef = firebase.firestore().collection("users").doc(user.uid);
+              userRef.update({
+                xp: firebase.firestore.FieldValue.increment(10)
+              }).then(() => {
+                console.log('XP updated!');
+              });
+            }
+          });
+
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1500);
+        } else {
+          document.getElementById('status').innerText = '❌ Try again. Move knight to f3.';
+          return 'snapback';
+        }
       }
-    }
+    });
   </script>
-
 </body>
 </html>
