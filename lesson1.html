@@ -1,17 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Lesson 1 - Knight Movement</title>
-  <link rel="stylesheet" href="chessboard-1.0.0.min.css">
-  <script src="chess.min.js"></script>
-  <script src="chessboard-1.0.0.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Lesson 1: Knight Movement</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 30px;
+      background: #f0f0f0;
+    }
+    #board {
+      width: 400px;
+      margin: 20px auto;
+    }
+    #status {
+      margin-top: 15px;
+      font-size: 20px;
+    }
+  </style>
 </head>
 <body>
-  <div id="board" style="width: 400px"></div>
+  <h1>Lesson 1: Knight Movement</h1>
+  <p>Move the knight to f3.</p>
+  <div id="board"></div>
+  <div id="status">Your move...</div>
+
+  <!-- Firebase scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+  <script src="firebase.js"></script>
+
+  <!-- Chess logic and board -->
+  <script src="chess.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+
   <script>
+    const game = new Chess();
+
     const board = Chessboard('board', {
-      position: 'start',
       draggable: true,
+      position: 'start',
+      pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
+      onDrop: (source, target, piece, newPos, oldPos, orientation) => {
+        if (source === 'g1' && target === 'f3' && piece === 'wN') {
+          document.getElementById('status').innerHTML = '✅ Great job!';
+          
+          firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+              const userRef = firebase.firestore().collection("users").doc(user.uid);
+              userRef.update({ xp: firebase.firestore.FieldValue.increment(10) }).then(() => {
+                setTimeout(() => {
+                  window.location.href = 'dashboard.html';
+                }, 1200);
+              });
+            }
+          });
+        } else {
+          document.getElementById('status').innerHTML = '❌ Try again. Move the knight to f3.';
+          return 'snapback';
+        }
+      }
     });
   </script>
 </body>
