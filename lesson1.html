@@ -1,40 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Lesson 1: Knight Movement</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 1 - Checklingo Chess</title>
+
+  <!-- ✅ Chessboard CSS via CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      padding: 30px;
-      background: #f0f0f0;
+      padding: 20px;
     }
+
     #board {
       width: 400px;
       margin: 20px auto;
     }
+
     #status {
-      margin-top: 15px;
-      font-size: 20px;
+      margin-top: 10px;
+      font-size: 1.2em;
     }
   </style>
 </head>
 <body>
-  <h1>Lesson 1: Knight Movement</h1>
-  <p>Move the knight to f3.</p>
+  <h1>Lesson 1: Move the Pawn</h1>
   <div id="board"></div>
-  <div id="status">Your move...</div>
+  <div id="status">Drag the pawn to f3.</div>
 
-  <!-- Firebase scripts -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
-  <script src="firebase.js"></script>
+  <!-- ✅ Load Chess logic -->
+  <script src="https://cdn.jsdelivr.net/npm/chess.js@0.10.3/chess.min.js"></script>
 
-  <!-- Chess logic and board -->
-  <script src="chess.min.js"></script>
+  <!-- ✅ Load Chessboard.js from CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
 
   <script>
@@ -43,23 +43,12 @@
     const board = Chessboard('board', {
       draggable: true,
       position: 'start',
-      pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
       onDrop: (source, target, piece, newPos, oldPos, orientation) => {
-        if (source === 'g1' && target === 'f3' && piece === 'wN') {
+        if (target === 'f3' && piece === 'wP' && source === 'f2') {
           document.getElementById('status').innerHTML = '✅ Great job!';
-          
-          firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-              const userRef = firebase.firestore().collection("users").doc(user.uid);
-              userRef.update({ xp: firebase.firestore.FieldValue.increment(10) }).then(() => {
-                setTimeout(() => {
-                  window.location.href = 'dashboard.html';
-                }, 1200);
-              });
-            }
-          });
+          return;
         } else {
-          document.getElementById('status').innerHTML = '❌ Try again. Move the knight to f3.';
+          document.getElementById('status').innerHTML = '❌ Try again. Move the f2 pawn to f3.';
           return 'snapback';
         }
       }
