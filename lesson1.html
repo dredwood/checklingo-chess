@@ -1,57 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lesson 1 - Checklingo Chess</title>
-
-  <!-- ✅ Chessboard CSS via CDN -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
-
+  <title>Lesson 1 - Chessboard Test</title>
+  <link rel="stylesheet" href="chessboard-1.0.0.min.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-    }
-
-    #board {
-      width: 400px;
-      margin: 20px auto;
-    }
-
-    #status {
-      margin-top: 10px;
-      font-size: 1.2em;
-    }
+    body { font-family: sans-serif; padding: 20px; }
   </style>
 </head>
 <body>
-  <h1>Lesson 1: Move the Pawn</h1>
-  <div id="board"></div>
-  <div id="status">Drag the pawn to f3.</div>
+  <h1>Lesson 1</h1>
+  <div id="board" class="chessboard"></div>
 
-  <!-- ✅ Load Chess logic -->
-  <script src="https://cdn.jsdelivr.net/npm/chess.js@0.10.3/chess.min.js"></script>
-
-  <!-- ✅ Load Chessboard.js from CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
-
+  <script src="chess.min.js"></script>
+  <script src="chessboard-1.0.0.min.js"></script>
   <script>
-    const game = new Chess();
-
-    const board = Chessboard('board', {
-      draggable: true,
-      position: 'start',
-      onDrop: (source, target, piece, newPos, oldPos, orientation) => {
-        if (target === 'f3' && piece === 'wP' && source === 'f2') {
-          document.getElementById('status').innerHTML = '✅ Great job!';
-          return;
-        } else {
-          document.getElementById('status').innerHTML = '❌ Try again. Move the f2 pawn to f3.';
-          return 'snapback';
-        }
-      }
+    const board = Chessboard(document.getElementById("board"), {
+      position: "start"
     });
   </script>
 </body>
